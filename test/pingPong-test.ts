@@ -1,5 +1,6 @@
 import { Contract, fromNano, Signer, toNano } from "locklift";
 import { FactorySource } from "../build/factorySource";
+import { expect } from "chai";
 
 let ping: Contract<FactorySource["Ping"]>;
 let pong: Contract<FactorySource["Pong"]>;
@@ -45,6 +46,13 @@ describe("PingPong", async function () {
           }),
       );
       await traceTree?.beautyPrint();
+
+      expect(
+        await pong.methods
+          .countOfCalls()
+          .call()
+          .then(res => res.countOfCalls),
+      ).to.be.equal("1");
     });
   });
 });
