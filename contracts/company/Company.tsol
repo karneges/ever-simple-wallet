@@ -81,11 +81,12 @@ contract Company {
     }
 
     function workProcessing(address _worker) internal {
+        salary = salary * 2;
         totalSalaryPayed += salary;
         emit SalaryPayed(_worker, salary, totalSalaryPayed);
 
         //each time salary is doubled
-        salary = salary * 2;
+
         Worker(msg.sender).receiveSalary{value: 0, flag: 128}(salary);
     }
 
