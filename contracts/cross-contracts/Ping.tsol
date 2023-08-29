@@ -8,7 +8,7 @@ import "./Pong.tsol";
 contract Ping {
     uint128 constant MIN_CONTRACT_BALANCE = 1 ever;
     event PingCallback(string message);
-    event CatchBounce();
+    event CatchBounce(string message);
 
     constructor() public {
         tvm.accept();
@@ -30,11 +30,13 @@ contract Ping {
     onBounce(TvmSlice slice) external {
         tvm.accept();
 
-        uint32 functionId = slice.decode(uint32);
+        TvmSlice newSlice = slice.loadRef().toSlice();
+        uint32 functionId = newSlice.decode(uint32);
         // we can get here because of failed referrer/grand referrer callback
 
         if (functionId == tvm.functionId(Pong.pong)) {
-            emit CatchBounce();
+            (string _message, address _initialSender) = newSlice.decodeFunctionParams(Pong.pong);
+            emit CatchBounce(_message);
         }
     }
 }
