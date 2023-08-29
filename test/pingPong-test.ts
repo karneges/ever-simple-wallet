@@ -53,6 +53,7 @@ describe("PingPong", async function () {
             from: user.address,
             amount: toNano(1),
           }),
+        {raise: false}
       );
       await traceTree?.beautyPrint();
 
